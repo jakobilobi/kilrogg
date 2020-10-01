@@ -25,7 +25,7 @@ from model import U2NET # full size version 173.6 MB
 from model import U2NETP # small version u2net 4.7 MB
 
 class ModelInterface:
-    def __init__(self, placeholder):
+    def __init__(self, placeholder=0):
         self.placeholder = placeholder
 
     def run_inference(self):
@@ -90,7 +90,7 @@ class ModelInterface:
 
             del d1,d2,d3,d4,d5,d6,d7
 
-    def save_output(image_name,pred,d_dir):
+    def save_output(self, image_name, pred, d_dir):
         predict = pred
         predict = predict.squeeze()
         predict_np = predict.cpu().data.numpy()
