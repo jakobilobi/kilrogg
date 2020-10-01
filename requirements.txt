@@ -6,3 +6,4 @@ torchvision
 glob3
 flask
 flask_cors
+uuid
