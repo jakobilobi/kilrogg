@@ -1,0 +1,6 @@
+numpy
+pillow
+scikit-image
+torch
+torchvision
+glob3
