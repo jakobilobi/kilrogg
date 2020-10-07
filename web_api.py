@@ -56,7 +56,8 @@ def cut():
             #os.remove(base_dir+"\\"+filename) (Maybe)
         model_file_path = os.path.join(os.getcwd(), filepath)
         cropped_image_filename =  mi.run_inference([model_file_path])
+        
         print(cropped_image_filename)
-        return redirect(url_for('transformed_file', filename=filename))
+        return redirect(url_for('transformed_file', filename=os.path.basename(cropped_image_filename[0])))
     # Cut logic here
     return "this is cut"
