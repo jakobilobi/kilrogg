@@ -24,15 +24,32 @@ from model.data_loader import SalObjDataset
 from model import U2NET # full size version 173.6 MB
 from model import U2NETP # small version u2net 4.7 MB
 
+
+def resolve_input(path):
+    file_list = []
+
+    if (isinstance(path, list)):
+        for item in path:
+            if (os.path.isdir(item)):
+                file_list += glob.glob(item + os.sep + '*')
+            if (os.path.isfile(item)):
+                file_list += [item]
+    elif (os.path.isdir(path)):
+        file_list += glob.glob(path + os.sep + '*')
+    elif (os.path.isfile(path)):
+        file_list += [path]
+
+    return file_list
+
 class ModelInterface:
     def __init__(self, placeholder=0):
         self.placeholder = placeholder
 
-    def run_inference(self, input_image_paths):
+    def run_inference(self, input_path):
         # --------- 1. get image path and name ---------
         model_name='u2net'#u2netp
 
-        img_name_list = input_image_paths
+        img_name_list = resolve_input(input_path)
 
         prediction_dir = os.path.join(os.getcwd(), 'test_data', model_name + '_results' + os.sep)
         model_dir = os.path.join(os.getcwd(), 'saved_models', model_name, model_name + '.pth')
