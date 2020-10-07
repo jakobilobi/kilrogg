@@ -28,17 +28,14 @@ class ModelInterface:
     def __init__(self, placeholder=0):
         self.placeholder = placeholder
 
-    def run_inference(self):
+    def run_inference(self, input_image_paths):
         # --------- 1. get image path and name ---------
         model_name='u2net'#u2netp
 
-        #image_dir = os.path.join(os.getcwd(), 'test_data', 'test_images')
-        new_images = os.path.join(os.getcwd(), 'test_data', 'new_images')
+        img_name_list = input_image_paths
+
         prediction_dir = os.path.join(os.getcwd(), 'test_data', model_name + '_results' + os.sep)
         model_dir = os.path.join(os.getcwd(), 'saved_models', model_name, model_name + '.pth')
-
-        img_name_list = glob.glob(new_images + os.sep + '*')
-        print(img_name_list)
 
         # --------- 2. dataloader ---------
         #1. dataloader
