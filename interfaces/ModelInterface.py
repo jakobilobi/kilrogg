@@ -24,21 +24,19 @@ from model.data_loader import SalObjDataset
 from model import U2NET # full size version 173.6 MB
 from model import U2NETP # small version u2net 4.7 MB
 
+def get_path_as_list(path):
+    if (os.path.isdir(path)):
+        return glob.glob(path + os.sep + '*')
+    if (os.path.isfile(path)):
+        return [path]
 
 def resolve_input(path):
     file_list = []
-
     if (isinstance(path, list)):
         for item in path:
-            if (os.path.isdir(item)):
-                file_list += glob.glob(item + os.sep + '*')
-            if (os.path.isfile(item)):
-                file_list += [item]
-    elif (os.path.isdir(path)):
-        file_list += glob.glob(path + os.sep + '*')
-    elif (os.path.isfile(path)):
-        file_list += [path]
-
+            file_list += get_path_as_list(item)
+    else:
+        file_list += get_path_as_list(path)
     return file_list
 
 class ModelInterface:
