@@ -6,12 +6,14 @@ from interfaces import ModelInterface as MI
 from PIL import Image
 
 UPLOAD_FOLDER = 'uploads'
+TRANSFORMATION_FOLDER = 'test_data/u2net_results'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 app = Flask(__name__)
 CORS(app)
 app.config["DEBUG"] = True
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+app.config["TRANSFORMATION_FOLDER"] = TRANSFORMATION_FOLDER
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -23,6 +25,10 @@ def secure_filename(filename):
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+@app.route('/test_data/u2net_results/<filename>')
+def transformed_file(filename):
+    return send_from_directory(app.config['TRANSFORMATION_FOLDER'],filename)
 
 
 @app.route('/', methods=['POST'])
@@ -49,8 +55,8 @@ def cut():
             print('Bad file:', filename)
             #os.remove(base_dir+"\\"+filename) (Maybe)
         model_file_path = os.path.join(os.getcwd(), filepath)
-        mi.run_inference([model_file_path])
-        print(model_file_path)
-        return redirect(url_for('uploaded_file', filename=filename))
+        cropped_image_filename =  mi.run_inference([model_file_path])
+        print(cropped_image_filename)
+        return redirect(url_for('transformed_file', filename=filename))
     # Cut logic here
     return "this is cut"
