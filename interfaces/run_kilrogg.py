@@ -16,9 +16,10 @@ def main(argv):
         print(f)
 
     model = ModelInterface()
-    saved_files = model.run_inference(args.path)
+    model.run_inference(args.path)
+
     print("Inference successful, files saved to:")
-    for f in saved_files:
+    for f in model.get_saved_files_realpath():
         print(f)
 
 if __name__ == '__main__':
