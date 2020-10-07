@@ -12,7 +12,10 @@ def main(argv):
     args = arg_parser.parse_args(argv)
 
     model = ModelInterface()
-    model.run_inference(args.filepath)
+    saved_files = model.run_inference(args.filepath)
+    print("Inference successful, files saved to:")
+    for f in saved_files:
+        print(f)
 
 if __name__ == '__main__':
     sys.exit(main(sys.argv[1:]))

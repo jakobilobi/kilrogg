@@ -62,8 +62,8 @@ class ModelInterface:
         net.eval()
 
         # --------- 4. inference for each image ---------
+        saved_filenames = []
         for i_test, data_test in enumerate(test_salobj_dataloader):
-
             print("inferencing:",img_name_list[i_test].split(os.sep)[-1])
 
             inputs_test = data_test['image']
@@ -83,9 +83,12 @@ class ModelInterface:
             # save results to test_results folder
             if not os.path.exists(prediction_dir):
                 os.makedirs(prediction_dir, exist_ok=True)
-            self.save_output(img_name_list[i_test],pred,prediction_dir)
+            filename = self.save_output(img_name_list[i_test],pred,prediction_dir)
 
             del d1,d2,d3,d4,d5,d6,d7
+            saved_filenames = saved_filenames + [filename]
+
+        return saved_filenames
 
     def save_output(self, image_name, pred, d_dir):
         predict = pred
@@ -105,7 +108,9 @@ class ModelInterface:
         for i in range(1,len(bbb)):
             imidx = imidx + "." + bbb[i]
 
-        imo.save(d_dir+imidx+'.png')
+        filename = d_dir + imidx + '.png'
+        imo.save(filename)
+        return filename
 
     # normalize the predicted SOD probability map
     def normPRED(self, d):
