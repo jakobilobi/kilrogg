@@ -3,7 +3,7 @@ from flask_cors import CORS
 import uuid
 import os
 
-UPLOAD_FOLDER = './uploads'
+UPLOAD_FOLDER = '../uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 app = Flask(__name__)
