@@ -42,6 +42,7 @@ def resolve_input(path):
 class ModelInterface:
     def __init__(self, placeholder=0):
         self.placeholder = placeholder
+        self.infered_np_arrays = []
         self.saved_files = []
 
     def run_inference(self, input_path):
@@ -99,18 +100,20 @@ class ModelInterface:
             # save results to test_results folder
             if not os.path.exists(prediction_dir):
                 os.makedirs(prediction_dir, exist_ok=True)
-            filename = self.save_output(img_name_list[i_test],pred,prediction_dir)
+
+            predict = pred
+            predict = predict.squeeze()
+            predict_np = predict.cpu().data.numpy()
+            self.infered_np_arrays.append(predict_np)
+
+            filename = self.save_output(img_name_list[i_test], predict_np, prediction_dir)
 
             del d1,d2,d3,d4,d5,d6,d7
             saved_file_paths = saved_file_paths + [filename]
 
         self.saved_files = saved_file_paths
 
-    def save_output(self, image_name, pred, d_dir):
-        predict = pred
-        predict = predict.squeeze()
-        predict_np = predict.cpu().data.numpy()
-
+    def save_output(self, image_name, predict_np, d_dir):
         im = Image.fromarray(predict_np*255).convert('RGB')
         img_name = image_name.split(os.sep)[-1]
         image = io.imread(image_name)
@@ -136,6 +139,9 @@ class ModelInterface:
         for f in self.saved_files:
             filenames += [os.path.basename(f)]
         return filenames
+
+    def get_infered_np_arrays(self):
+        return self.infered_np_arrays
 
     # normalize the predicted SOD probability map
     def normPRED(self, d):
