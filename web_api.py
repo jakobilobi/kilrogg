@@ -60,4 +60,27 @@ def cut():
         print(cropped_image_filename)
         return redirect(url_for('transformed_file', filename=os.path.basename(cropped_image_filename[0])))
     # Cut logic here
-    return "this is cut"
+
+
+
+def turn_img_transparent(relative_filepath, numpy_array):
+
+    img = Image.open(relative_filepath)
+    img = img.convert("RGBA")
+    datas = img.getdata()
+    # Calculate size of np-array and image and make sure they are the same
+    img_width, img_height = img.size()
+    np_width, np_height = numpy_array.shape
+
+    if(!(img_width == np_width) and !(img_height == np_height))
+        raise Exception(f'Image and array are not the same size. NP dimensions: ({np_width} {np_height}). Img dimensions: ({img_width} {img_height})')
+
+    new_data = []
+    for item in numpy_array:
+        if item[0] == 255 and item[1] == 255 and item[2] == 255:
+            newData.append((255, 255, 255, 0))
+        else:
+            newData.append(item)
+
+    img.putdata(new_data)
+    img.save("img2.png", "PNG")
